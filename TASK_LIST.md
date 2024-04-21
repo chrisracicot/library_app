@@ -9,6 +9,7 @@ def __init__
 def load_books() 
 def print_menu()
 main()
+GENRES class
 
 
 Lily:
