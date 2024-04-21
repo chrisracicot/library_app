@@ -10,6 +10,8 @@ def load_books()
 def print_menu()
 main()
 GENRES class
+Create secret menu
+Underline selections
 
 
 Lily:
@@ -27,4 +29,19 @@ def borrow_book()
 
 
 Everyone make sure to leave comments on your parts.
+
+# Functions that need to be created:
+# Book.search_books()
+# Book.borrow_book()
+# Book.return_book()
+# Book.validity_check()
+# Book.find_book_by_isbn()
+# Book.add_book()
+# Book.remove_book()
+# Book.print_books()
+# Book.save_books()
+
+# Book.management_dict()
+
 ```
+
