@@ -181,8 +181,7 @@ def search_books(book_list,search_str):
 
 #def print_books
 def print_books(books):
-    print("{:14s} {:25s} {:25s} {:20s} {:s}".format("ISBN", "Title",
-    "Author", "Genre", "Availability"))
+    print("{:14s} {:25s} {:25s} {:20s} {:s}".format("ISBN", "Title", "Author", "Genre", "Availability"))
     print("{:14s} {:25s} {:25s} {:20s} {:s}".format('-' * 14, '-' * 25, '-' * 25, '-' * 20, '-' * 12))
     for book in books:
         print(book)
@@ -195,7 +194,7 @@ def save_books(book_list,path_name):
             book_info = f"{book.get_isbn()},{book.get_title()},{book.get_author()},{book.get_genre()},{book.get_available()}"
             file.write(book_info + '\n')
             count += 1
-    return count
+    return count          #•	Returns the number of books saved to the file
 
 #def load_books
 def load_books(book_list,path_name):
@@ -206,7 +205,8 @@ def load_books(book_list,path_name):
             book = Book(isbn, title, author, genre_name, available)
             book_list.append(book)
 
-#def print_menu           
+#def print_menu
+#staticmethod decorator define a static method without needing access to class instance attributes or methods  
 @staticmethod
 def print_menu(heading,options):
     print(heading)
@@ -292,6 +292,7 @@ def main():
         "3": "Return a book",
         "0": "Exit the system"
     }
+    #loop until user quit
     while True:
         choice = print_menu(menu_heading, menu_options)
         if choice == "1":
