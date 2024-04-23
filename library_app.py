@@ -47,6 +47,10 @@ def load_books(book_list,path_name):
         for line in file:
             data = line.strip().split(',')
             isbn, title, author, genre_name, available = data
+            if available == "True":
+                available = True
+            elif available == "False":
+                available = False
             book = Book(isbn, title, author, genre_name, available)
             book_list.append(book)
 
