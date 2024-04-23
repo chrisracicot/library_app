@@ -1,160 +1,5 @@
-import csv
-
-class Book:
-
-        def __init__(self, isbn, title, author, genre, available):
-                self.isbn = isbn
-                self.title = title
-                self.author = author
-                self.genre = genre
-                self.available = available
-
-        
-        GENRES = {
-        0: "Romance",                   
-        1: "Mystery",                 
-        2: "Science Fiction",                  
-        3: "Thriller",                  
-        4: "Young Adult",                  
-        5: "Children’s Fiction",                  
-        6: "Self-help",                  
-        7: "Fantasy",                  
-        8: "Historical Fiction",                  
-        9: "Poetry"                  
-        }
-
-        
-        @staticmethod
-        def load_books(book_list, catalogue):
-                if catalogue != 'books.csv':
-                        print(f"{catalogue} catalogue not found")
-                        exit()
-
-                print("Book catalogue has been loaded.")
-                with open(catalogue, newline='') as csvfile:
-                        reader = csv.reader(csvfile)
-                        for row in reader:
-                                if row:  # check if row is not empty
-                                        isbn, title, author, genre, available = row
-                                        book = Book(isbn, title, author, int(genre), available)  # Convert genre to int
-                                        book_list.append(book)             
-                return len(book_list)
-        
-
-        #Prints Main Menu for user
-        def print_menu(menu_heading, menu_choices_dict):
-                print("Reader's Guild Library - Main Menu")       
-                print("==================================")
-                for key, value in menu_choices_dict.items():
-                        print(f"{key}: {value}")
-                return input("Enter your selection: ")
-
-
-        @staticmethod
-        def books_headers(book_list):  
-                
-                # add book_list as an argument
-                headings = ["ISBN", "Title", "Author", "Genre", "Available"]
-                
-                # Determine the maximum width for each column
-                widths = []
-                for i, attr in enumerate(headings):
-                        attr_lower = attr.lower()  # Convert the heading back to lowercase for the getattr function
-                        if attr_lower == "genre":
-                                max_len = max(len(Book.GENRES[int(getattr(book, attr_lower))]) for book in book_list)
-                        else:
-                                max_len = max(len(str(getattr(book, attr_lower))) for book in book_list)
-                        widths.append(max(max_len, len(headings[i])))
-                
-                # Create a format string that left-aligns each item
-                format_string = " ".join("{:<" + str(width) + "}" for width in widths)
-                
-                # Use the format string to create the heading string
-                heading_string = format_string.format(*headings)
-                
-                return heading_string
-
-
-
-        
-        def catalogue_dict():
-                menu_dict = {
-                        '1': 'Search for books',
-                        '2': 'Borrow a book',
-                        '3': 'Return a book',
-                        '0': 'Exit the system'
-                }
-                return menu_dict
-
-
-
-
-def main():
-        book_list = []
-        print("Starting the system...")
-
-# ####################################IMPORTANT################################################################
-#         Temporary work around for automatic csv entry: mark sure to 
-#         replace "catalogue = books.csv" with "catalogue = str(input("Enter book file catalogue name: "))" 
-#                               ### before submission ###
-###############################################################################################################
-        catalogue = 'books.csv'
-###################################
-        
-        #Run load_books function and return length of list
-        book_list_len = Book.load_books(book_list, catalogue)
-        book_list_len = int(book_list_len)
-
-        #creating main menu dictionary and search results display headings
-        menu_heading = Book.books_headers(book_list)
-        choices_dict = Book.catalogue_dict()
-
-
-        menu_choice = ""
-        while menu_choice != "0":
-                menu_choice = Book.print_menu(menu_heading, choices_dict)
-        if menu_choice == "1":
-                Book.search_books()
-        elif menu_choice == "2":
-                Book.borrow_book()
-        elif menu_choice == "3":
-                Book.return_book()
-        else:
-                Book.validity_check()
-        
-        #Save books and exit the program
-        Book.save_books(book_list, catalogue)
-        print("-- Exit the system --")
-        print("Book catalog has been saved.")
-        print("Good Bye!")
-
-if __name__ == "__main__":
-        main()
-
-
-# Functions that need to be created:
-
-# Book.search_books()
-
-# Book.borrow_book()
-
-# Book.return_book()
-
-# Book.validity_check()
-
-# Book.find_book_by_isbn()
-
-# Book.add_book()
-
-# Book.remove_book()
-
-# Book.print_books()
-
-# Book.save_books()
-
-
-
-#lily
+#This is the Library Management System created by Ruili Hu and Christin Racicot, on April 22, 2024. It is a program to bulid a new system to manage inventory and borrowing process for The Reader’s Guild Library.
+#books information is stored i book.csv, Book class is improted from book.python, which is the part 1 of this assignment. 
 
 #import os and Book class
 import os
@@ -165,7 +10,7 @@ def find_book_by_isbn(book_list,isbn):
     for i in range(len(book_list)):
         if book_list[i].get_isbn() == isbn:
             return i
-    return -1
+    return -1       #•	Returns the index of the matching book or -1 if none found
 
 #def search_books
 def search_books(book_list,search_str):
@@ -195,7 +40,7 @@ def save_books(book_list,path_name):
             book_info = f"{book.get_isbn()},{book.get_title()},{book.get_author()},{book.get_genre()},{book.get_available()}"
             file.write(book_info + '\n')
             count += 1
-    return count
+    return count          #•	Returns the number of books saved to the file
 
 #def load_books
 def load_books(book_list,path_name):
@@ -203,6 +48,10 @@ def load_books(book_list,path_name):
         for line in file:
             data = line.strip().split(',')
             isbn, title, author, genre_name, available = data
+            if available == "True":
+                available = True
+            elif available == "False":
+                available = False
             book = Book(isbn, title, author, genre_name, available)
             book_list.append(book)
 
@@ -227,9 +76,9 @@ def borrow_book(book_list):
         book = book_list[index]
         if book.get_available():
             book.borrow_it()
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is successfully borrowed.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is successfully borrowed.")
         else:
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is not currently available.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is not currently available.")
     else:
         print(f'No book found with that ISBN.')
 
@@ -242,9 +91,9 @@ def return_book(book_list):
         book = book_list[index]
         if not book.get_available():
             book.return_it()
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is successfully returned.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is successfully returned.")
         else:
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is not currently borrowed.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is not currently borrowed.")
     else:
         print(f'No book found with that ISBN.')
 
@@ -264,7 +113,7 @@ def add_book(book_list):
     new_book = Book(isbn, title, author, genre, available=True)
     new_book.set_available(True)
     book_list.append(new_book)
-    print(f'{title} with ISBN {isbn} is successfully added.')
+    print(f"'{title}' with ISBN {isbn} is successfully added.")
 
 #def remove_book
 def remove_book(book_list):
@@ -274,7 +123,9 @@ def remove_book(book_list):
     title = book_list[index].get_title()
     if index != -1:
         del book_list[index]
-        print(f'{title} with ISBN {isbn} is successfully removed.')
+        print(f"'{title}' with ISBN {isbn} is successfully removed.")
+    else:
+        print(f'No book found with that ISBN.')
 
 #def main
 def main():
@@ -292,6 +143,8 @@ def main():
         "3": "Return a book",
         "0": "Exit the system"
     }
+
+    #loop for user to enter options until user choose to quit
     while True:
         choice = print_menu(menu_heading, menu_options)
         if choice == "1":
@@ -328,38 +181,40 @@ def main():
                 "6": "Print catalog",
                 "0": "Exit the system"
             }
-            add_choice = print_menu(special_heading, special_menu)
-            if add_choice == "1":
-                print("-- Search for books --")
-                search_value = input("Enter search value: ")
-                search_result = search_books(search_value)
-                if not search_result:
-                    print("No matching books found.")
-                else:
-                    print_books(search_result)
+            #loop in the librarian system 
+            while True:
+                add_choice = print_menu(special_heading, special_menu)
+                if add_choice == "1":
+                    print("-- Search for books --")
+                    search_value = input("Enter search value: ")
+                    search_result = search_books(search_value)
+                    if not search_result:
+                        print("No matching books found.")
+                    else:
+                        print_books(search_result)
+                    
+                elif add_choice == "2":
+                    borrow_book(books)
                 
-            elif add_choice == "2":
-                borrow_book(books)
-            
-            elif add_choice == "3":
-                return_book(books)
-            
-            elif add_choice == "4":
-                add_book(books)
+                elif add_choice == "3":
+                    return_book(books)
+                
+                elif add_choice == "4":
+                    add_book(books)
 
-            elif add_choice == "5":
-                remove_book(books)
+                elif add_choice == "5":
+                    remove_book(books)
 
-            elif add_choice == "6":
-                print("-- Print book catalog --")
-                print_books(books)
-            
-            elif add_choice == "0":
-                save_books(books) 
-                print("-- Exit the system --")
-                print("Book catalog has been saved.")
-                print("Good Bye!")
-                break
+                elif add_choice == "6":
+                    print("-- Print book catalog --")
+                    print_books(books)
+                
+                elif add_choice == "0":
+                    save_books(books, file_path) 
+                    print("-- Exit the system --")
+                    print("Book catalog has been saved.")
+                    print("Good Bye!")
+                    exit()
 
         else:
             print("Invalid choice. Please enter a valid option.")
