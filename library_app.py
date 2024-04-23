@@ -123,6 +123,8 @@ def remove_book(book_list):
     if index != -1:
         del book_list[index]
         print(f"'{title}' with ISBN {isbn} is successfully removed.")
+    else:
+        print(f'No book found with that ISBN.')
 
 #def main
 def main():
@@ -207,7 +209,7 @@ def main():
                     print_books(books)
                 
                 elif add_choice == "0":
-                    save_books(books) 
+                    save_books(books, file_path) 
                     print("-- Exit the system --")
                     print("Book catalog has been saved.")
                     print("Good Bye!")
