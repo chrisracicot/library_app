@@ -75,9 +75,9 @@ def borrow_book(book_list):
         book = book_list[index]
         if book.get_available():
             book.borrow_it()
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is successfully borrowed.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is successfully borrowed.")
         else:
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is not currently available.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is not currently available.")
     else:
         print(f'No book found with that ISBN.')
 
@@ -90,9 +90,9 @@ def return_book(book_list):
         book = book_list[index]
         if not book.get_available():
             book.return_it()
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is successfully returned.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is successfully returned.")
         else:
-            print(f'{book.get_title()} with ISBN {book.get_isbn()} is not currently borrowed.')
+            print(f"'{book.get_title()}' with ISBN {book.get_isbn()} is not currently borrowed.")
     else:
         print(f'No book found with that ISBN.')
 
@@ -112,7 +112,7 @@ def add_book(book_list):
     new_book = Book(isbn, title, author, genre, available=True)
     new_book.set_available(True)
     book_list.append(new_book)
-    print(f'{title} with ISBN {isbn} is successfully added.')
+    print(f"'{title}' with ISBN {isbn} is successfully added.")
 
 #def remove_book
 def remove_book(book_list):
@@ -122,7 +122,7 @@ def remove_book(book_list):
     title = book_list[index].get_title()
     if index != -1:
         del book_list[index]
-        print(f'{title} with ISBN {isbn} is successfully removed.')
+        print(f"'{title}' with ISBN {isbn} is successfully removed.")
 
 #def main
 def main():
@@ -178,38 +178,40 @@ def main():
                 "6": "Print catalog",
                 "0": "Exit the system"
             }
-            add_choice = print_menu(special_heading, special_menu)
-            if add_choice == "1":
-                print("-- Search for books --")
-                search_value = input("Enter search value: ")
-                search_result = search_books(search_value)
-                if not search_result:
-                    print("No matching books found.")
-                else:
-                    print_books(search_result)
+            #loop in the librarian system 
+            while True:
+                add_choice = print_menu(special_heading, special_menu)
+                if add_choice == "1":
+                    print("-- Search for books --")
+                    search_value = input("Enter search value: ")
+                    search_result = search_books(search_value)
+                    if not search_result:
+                        print("No matching books found.")
+                    else:
+                        print_books(search_result)
+                    
+                elif add_choice == "2":
+                    borrow_book(books)
                 
-            elif add_choice == "2":
-                borrow_book(books)
-            
-            elif add_choice == "3":
-                return_book(books)
-            
-            elif add_choice == "4":
-                add_book(books)
+                elif add_choice == "3":
+                    return_book(books)
+                
+                elif add_choice == "4":
+                    add_book(books)
 
-            elif add_choice == "5":
-                remove_book(books)
+                elif add_choice == "5":
+                    remove_book(books)
 
-            elif add_choice == "6":
-                print("-- Print book catalog --")
-                print_books(books)
-            
-            elif add_choice == "0":
-                save_books(books) 
-                print("-- Exit the system --")
-                print("Book catalog has been saved.")
-                print("Good Bye!")
-                break
+                elif add_choice == "6":
+                    print("-- Print book catalog --")
+                    print_books(books)
+                
+                elif add_choice == "0":
+                    save_books(books) 
+                    print("-- Exit the system --")
+                    print("Book catalog has been saved.")
+                    print("Good Bye!")
+                    break
 
         else:
             print("Invalid choice. Please enter a valid option.")
