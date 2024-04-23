@@ -1,4 +1,5 @@
-#comments
+#This is the Library Management System created by Ruili Hu and Christin Racicot, on April 22, 2024. It is a program to bulid a new system to manage inventory and borrowing process for The Reader’s Guild Library.
+#books information is stored i book.csv, Book class is improted from book.python, which is the part 1 of this assignment. 
 
 #import os and Book class
 import os
@@ -213,7 +214,7 @@ def main():
                     print("-- Exit the system --")
                     print("Book catalog has been saved.")
                     print("Good Bye!")
-                    break
+                    exit()
 
         else:
             print("Invalid choice. Please enter a valid option.")
